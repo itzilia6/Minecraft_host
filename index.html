@@ -6,11 +6,11 @@
 
 <body>
 
-    <h1>ასაკის შემოწმება</h1>
+    <h1>აბა აბა ფულს გადმომირიცხავ?</h1>
 
-    <p>შეიყვანე შენი ასაკი:</p>
+    <p> 1=არა 2=კი </p>
 
-    <input id="age" type="number" placeholder="ასაკი">
+    <input id="age" type="number" placeholder="აქ ჩაწერე">
 
     <button onclick="checkAge()">შემოწმება</button>
 
@@ -20,15 +20,15 @@
         function checkAge() {
             let age = document.getElementById("age").value;
 
-            if (age >= 18) {
+            if (age >= 2) {
                 document.getElementById("result").innerText =
-                    "შენ სრულწლოვანი ხარ!";
+                    "good boyyy!";
             } else {
                 document.getElementById("result").innerText =
-                    "შენ ჯერ არასრულწლოვანი ხარ!";
+                    "დამეხიე აგერ!";
             }
         }
     </script>
 
 </body>
-</html>
+</html> 
