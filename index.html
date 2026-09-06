@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>My Minecraft Host</title>
 
 <style>
@@ -11,11 +12,10 @@ body {
     font-family: Arial, sans-serif;
     background: #0f1115;
     color: white;
-    text-align: center;
 }
 
 header {
-    padding: 25px;
+    padding: 20px 30px;
     background: #171a23;
     font-size: 24px;
     font-weight: bold;
@@ -23,6 +23,7 @@ header {
 
 .container {
     padding: 70px 20px;
+    text-align: center;
 }
 
 h1 {
@@ -35,7 +36,7 @@ p {
 
 button {
     margin: 8px;
-    padding: 14px 25px;
+    padding: 12px 22px;
     border: none;
     border-radius: 8px;
     background: #5865f2;
@@ -50,7 +51,11 @@ button:hover {
 
 #serverForm, #dashboard {
     display: none;
-    margin: 30px auto;
+}
+
+#serverForm {
+    text-align: center;
+    margin: 40px auto;
     padding: 25px;
     max-width: 450px;
     background: #171a23;
@@ -63,21 +68,80 @@ input, select {
     margin: 10px;
     border-radius: 6px;
     border: none;
+    font-size: 16px;
 }
 
-.online {
+#dashboard {
+    padding: 25px;
+    max-width: 1000px;
+    margin: auto;
+}
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.status-online {
     color: #57f287;
 }
 
-.offline {
+.status-offline {
     color: #ed4245;
 }
 
-.info {
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.card {
+    background: #171a23;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #aeb4c0;
+}
+
+.menu {
+    margin-top: 25px;
+}
+
+.panel {
+    display: none;
+    background: #171a23;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.console {
+    background: #090a0d;
+    color: #57f287;
+    text-align: left;
+    padding: 15px;
+    height: 220px;
+    overflow-y: auto;
+    font-family: monospace;
+    border-radius: 8px;
+}
+
+.console-input {
+    width: 70%;
+}
+
+.file {
     background: #222633;
     padding: 12px;
-    margin: 10px;
-    border-radius: 8px;
+    margin: 8px 0;
+    border-radius: 6px;
+    text-align: left;
 }
 </style>
 </head>
@@ -86,14 +150,21 @@ input, select {
 
 <header>⛏ My Minecraft Host</header>
 
+
+<!-- HOME -->
+
 <div class="container" id="home">
 
     <h1>Your Minecraft Server Starts Here</h1>
+
     <p>Create and manage your Minecraft server.</p>
 
     <button onclick="showForm()">Create Server</button>
 
 </div>
+
+
+<!-- CREATE SERVER -->
 
 <div id="serverForm">
 
@@ -125,88 +196,372 @@ input, select {
 
 </div>
 
+
+<!-- DASHBOARD -->
+
 <div id="dashboard">
 
-    <h2 id="dashboardName">My Server</h2>
+    <div class="dashboard-header">
 
-    <div class="info">
-        Status: <span id="status" class="offline">● Offline</span>
+        <h2 id="dashboardName">My Server</h2>
+
+        <span id="status" class="status-offline">
+            ● Offline
+        </span>
+
     </div>
 
-    <div class="info">
-        Minecraft Version: <span id="dashboardVersion"></span>
+
+    <div>
+
+        <button onclick="startServer()">▶ Start</button>
+
+        <button onclick="stopServer()">■ Stop</button>
+
+        <button onclick="restartServer()">↻ Restart</button>
+
     </div>
 
-    <div class="info">
-        Software: <span id="dashboardSoftware"></span>
+
+    <!-- STATS -->
+
+    <div class="stats">
+
+        <div class="card">
+            <h3>Server IP</h3>
+            <span id="serverIP">Coming soon</span>
+        </div>
+
+        <div class="card">
+            <h3>Players</h3>
+            <span id="players">0 / 20</span>
+        </div>
+
+        <div class="card">
+            <h3>Uptime</h3>
+            <span id="uptime">0 minutes</span>
+        </div>
+
+        <div class="card">
+            <h3>RAM</h3>
+            <span id="dashboardRam"></span>
+        </div>
+
     </div>
 
-    <div class="info">
-        RAM: <span id="dashboardRam"></span>
+
+    <!-- MENU -->
+
+    <div class="menu">
+
+        <button onclick="showPanel('consolePanel')">Console</button>
+
+        <button onclick="showPanel('filesPanel')">Files</button>
+
+        <button onclick="showPanel('settingsPanel')">Settings</button>
+
     </div>
 
-    <div class="info">
-        Server IP: <span>Coming soon</span>
+
+    <!-- CONSOLE -->
+
+    <div id="consolePanel" class="panel">
+
+        <h2>Server Console</h2>
+
+        <div class="console" id="consoleOutput">
+[INFO] Server panel ready...
+        </div>
+
+        <br>
+
+        <input
+        class="console-input"
+        id="consoleCommand"
+        placeholder="Enter command">
+
+        <button onclick="sendCommand()">Send</button>
+
     </div>
 
-    <button onclick="startServer()">▶ Start</button>
-    <button onclick="stopServer()">■ Stop</button>
-    <button onclick="restartServer()">↻ Restart</button>
+
+    <!-- FILES -->
+
+    <div id="filesPanel" class="panel">
+
+        <h2>Server Files</h2>
+
+        <div class="file">📄 server.properties</div>
+
+        <div class="file">📄 eula.txt</div>
+
+        <div class="file">📁 plugins</div>
+
+        <div class="file">📁 world</div>
+
+    </div>
+
+
+    <!-- SETTINGS -->
+
+    <div id="settingsPanel" class="panel">
+
+        <h2>Server Settings</h2>
+
+        <p>
+        Minecraft Version:
+        <span id="dashboardVersion"></span>
+        </p>
+
+        <p>
+        Software:
+        <span id="dashboardSoftware"></span>
+        </p>
+
+        <p>
+        Max Players: 20
+        </p>
+
+    </div>
+
 
 </div>
 
+
 <script>
 
+let serverRunning = false;
+let uptimeSeconds = 0;
+
+
+/* SHOW CREATE FORM */
+
 function showForm() {
+
     document.getElementById("home").style.display = "none";
+
     document.getElementById("serverForm").style.display = "block";
+
 }
+
+
+/* CREATE SERVER */
 
 function createServer() {
 
-    const name = document.getElementById("serverName").value;
+    const name =
+    document.getElementById("serverName").value;
 
     if (name.trim() === "") {
+
         alert("Enter a server name!");
+
         return;
+
     }
 
-    document.getElementById("serverForm").style.display = "none";
 
-    document.getElementById("dashboard").style.display = "block";
+    document.getElementById("serverForm").style.display =
+    "none";
 
-    document.getElementById("dashboardName").innerText = name;
+
+    document.getElementById("dashboard").style.display =
+    "block";
+
+
+    document.getElementById("dashboardName").innerText =
+    name;
+
 
     document.getElementById("dashboardVersion").innerText =
-        document.getElementById("version").value;
+    document.getElementById("version").value;
+
 
     document.getElementById("dashboardSoftware").innerText =
-        document.getElementById("software").value;
+    document.getElementById("software").value;
+
 
     document.getElementById("dashboardRam").innerText =
-        document.getElementById("ram").value;
+    document.getElementById("ram").value;
+
+
+    document.getElementById("serverIP").innerText =
+    name.toLowerCase().replace(/\s+/g, "-") + ".myhost.net";
+
 }
+
+
+/* START */
 
 function startServer() {
-    const status = document.getElementById("status");
 
-    status.innerText = "● Online";
-    status.className = "online";
-}
+    serverRunning = true;
 
-function stopServer() {
-    const status = document.getElementById("status");
+    document.getElementById("status").innerText =
+    "● Online";
 
-    status.innerText = "● Offline";
-    status.className = "offline";
-}
+    document.getElementById("status").className =
+    "status-online";
 
-function restartServer() {
-    stopServer();
+
+    addConsole(
+    "[INFO] Starting server..."
+    );
+
 
     setTimeout(function() {
-        startServer();
+
+        addConsole(
+        "[INFO] Server started successfully!"
+        );
+
     }, 1000);
+
+}
+
+
+/* STOP */
+
+function stopServer() {
+
+    serverRunning = false;
+
+    uptimeSeconds = 0;
+
+
+    document.getElementById("status").innerText =
+    "● Offline";
+
+
+    document.getElementById("status").className =
+    "status-offline";
+
+
+    document.getElementById("uptime").innerText =
+    "0 minutes";
+
+
+    addConsole(
+    "[INFO] Server stopped."
+    );
+
+}
+
+
+/* RESTART */
+
+function restartServer() {
+
+    addConsole(
+    "[INFO] Restarting server..."
+    );
+
+
+    stopServer();
+
+
+    setTimeout(function() {
+
+        startServer();
+
+    }, 1500);
+
+}
+
+
+/* UPTIME */
+
+setInterval(function() {
+
+    if (serverRunning) {
+
+        uptimeSeconds++;
+
+
+        const minutes =
+        Math.floor(uptimeSeconds / 60);
+
+
+        document.getElementById("uptime").innerText =
+        minutes + " minutes";
+
+    }
+
+}, 1000);
+
+
+/* PANELS */
+
+function showPanel(panelId) {
+
+    document.querySelectorAll(".panel").forEach(function(panel) {
+
+        panel.style.display = "none";
+
+    });
+
+
+    document.getElementById(panelId).style.display =
+    "block";
+
+}
+
+
+/* CONSOLE */
+
+function sendCommand() {
+
+    const command =
+    document.getElementById("consoleCommand").value;
+
+
+    if (command.trim() === "") {
+
+        return;
+
+    }
+
+
+    addConsole(
+    "> " + command
+    );
+
+
+    document.getElementById("consoleCommand").value =
+    "";
+
+
+    if (!serverRunning) {
+
+        addConsole(
+        "[ERROR] Server is offline!"
+        );
+
+        return;
+
+    }
+
+
+    addConsole(
+    "[INFO] Command executed."
+    );
+
+}
+
+
+function addConsole(text) {
+
+    const consoleOutput =
+    document.getElementById("consoleOutput");
+
+
+    consoleOutput.innerHTML +=
+    "<br>" + text;
+
+
+    consoleOutput.scrollTop =
+    consoleOutput.scrollHeight;
+
 }
 
 </script>
