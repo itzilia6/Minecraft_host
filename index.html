@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>My Minecraft Host</title>
 
 <style>
@@ -27,23 +26,21 @@ header {
 }
 
 h1 {
-    font-size: 42px;
-    margin-bottom: 15px;
+    font-size: 38px;
 }
 
 p {
     color: #aeb4c0;
-    font-size: 18px;
 }
 
 button {
-    margin-top: 25px;
-    padding: 14px 30px;
+    margin: 8px;
+    padding: 14px 25px;
     border: none;
     border-radius: 8px;
     background: #5865f2;
     color: white;
-    font-size: 17px;
+    font-size: 16px;
     cursor: pointer;
 }
 
@@ -51,11 +48,11 @@ button:hover {
     background: #4752c4;
 }
 
-#serverForm {
+#serverForm, #dashboard {
     display: none;
-    margin: 40px auto;
+    margin: 30px auto;
     padding: 25px;
-    max-width: 400px;
+    max-width: 450px;
     background: #171a23;
     border-radius: 12px;
 }
@@ -66,88 +63,150 @@ input, select {
     margin: 10px;
     border-radius: 6px;
     border: none;
-    font-size: 16px;
 }
 
-#createMessage {
-    margin-top: 20px;
+.online {
     color: #57f287;
+}
+
+.offline {
+    color: #ed4245;
+}
+
+.info {
+    background: #222633;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 8px;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-⛏ My Minecraft Host
-</header>
+<header>⛏ My Minecraft Host</header>
 
-<div class="container">
+<div class="container" id="home">
 
     <h1>Your Minecraft Server Starts Here</h1>
-
     <p>Create and manage your Minecraft server.</p>
 
     <button onclick="showForm()">Create Server</button>
 
-    <div id="serverForm">
+</div>
 
-        <h2>Create Your Server</h2>
+<div id="serverForm">
 
-        <input type="text" id="serverName" placeholder="Server Name">
+    <h2>Create Your Server</h2>
 
-        <br>
+    <input type="text" id="serverName" placeholder="Server Name">
 
-        <select id="version">
-            <option value="1.21.11">Minecraft 1.21.11</option>
-            <option value="1.21.10">Minecraft 1.21.10</option>
-            <option value="1.21.8">Minecraft 1.21.8</option>
-        </select>
+    <select id="version">
+        <option>1.21.11</option>
+        <option>1.21.10</option>
+        <option>1.21.8</option>
+    </select>
 
-        <br>
+    <select id="software">
+        <option>Paper</option>
+        <option>Fabric</option>
+        <option>Vanilla</option>
+    </select>
 
-        <select id="software">
-            <option>Paper</option>
-            <option>Fabric</option>
-            <option>Vanilla</option>
-        </select>
+    <select id="ram">
+        <option>2 GB RAM</option>
+        <option>4 GB RAM</option>
+        <option>8 GB RAM</option>
+    </select>
 
-        <br>
+    <br>
 
-        <select id="ram">
-            <option>2 GB RAM</option>
-            <option>4 GB RAM</option>
-            <option>8 GB RAM</option>
-        </select>
+    <button onclick="createServer()">Create Server</button>
 
-        <br>
+</div>
 
-        <button onclick="createServer()">Create</button>
+<div id="dashboard">
 
-        <p id="createMessage"></p>
+    <h2 id="dashboardName">My Server</h2>
 
+    <div class="info">
+        Status: <span id="status" class="offline">● Offline</span>
     </div>
+
+    <div class="info">
+        Minecraft Version: <span id="dashboardVersion"></span>
+    </div>
+
+    <div class="info">
+        Software: <span id="dashboardSoftware"></span>
+    </div>
+
+    <div class="info">
+        RAM: <span id="dashboardRam"></span>
+    </div>
+
+    <div class="info">
+        Server IP: <span>Coming soon</span>
+    </div>
+
+    <button onclick="startServer()">▶ Start</button>
+    <button onclick="stopServer()">■ Stop</button>
+    <button onclick="restartServer()">↻ Restart</button>
 
 </div>
 
 <script>
 
 function showForm() {
+    document.getElementById("home").style.display = "none";
     document.getElementById("serverForm").style.display = "block";
 }
 
 function createServer() {
 
-    let name = document.getElementById("serverName").value;
+    const name = document.getElementById("serverName").value;
 
-    if (name === "") {
-        alert("Please enter a server name!");
+    if (name.trim() === "") {
+        alert("Enter a server name!");
         return;
     }
 
-    document.getElementById("createMessage").innerText =
-        "Server '" + name + "' has been created! 🎉";
+    document.getElementById("serverForm").style.display = "none";
 
+    document.getElementById("dashboard").style.display = "block";
+
+    document.getElementById("dashboardName").innerText = name;
+
+    document.getElementById("dashboardVersion").innerText =
+        document.getElementById("version").value;
+
+    document.getElementById("dashboardSoftware").innerText =
+        document.getElementById("software").value;
+
+    document.getElementById("dashboardRam").innerText =
+        document.getElementById("ram").value;
+}
+
+function startServer() {
+    const status = document.getElementById("status");
+
+    status.innerText = "● Online";
+    status.className = "online";
+}
+
+function stopServer() {
+    const status = document.getElementById("status");
+
+    status.innerText = "● Offline";
+    status.className = "offline";
+}
+
+function restartServer() {
+    stopServer();
+
+    setTimeout(function() {
+        startServer();
+    }, 1000);
 }
 
 </script>
