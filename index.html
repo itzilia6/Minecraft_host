@@ -1,71 +1,156 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Minecraft Host</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f1117;
-      color: white;
-      text-align: center;
-    }
+<title>My Minecraft Host</title>
 
-    header {
-      padding: 25px;
-      background: #171a23;
-      font-size: 24px;
-      font-weight: bold;
-    }
+<style>
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f1115;
+    color: white;
+    text-align: center;
+}
 
-    .container {
-      padding: 70px 20px;
-    }
+header {
+    padding: 25px;
+    background: #171a23;
+    font-size: 24px;
+    font-weight: bold;
+}
 
-    h1 {
-      font-size: 42px;
-      margin-bottom: 15px;
-    }
+.container {
+    padding: 70px 20px;
+}
 
-    p {
-      color: #aeb4c0;
-      font-size: 18px;
-    }
+h1 {
+    font-size: 42px;
+    margin-bottom: 15px;
+}
 
-    button {
-      margin-top: 25px;
-      padding: 14px 30px;
-      border: none;
-      border-radius: 8px;
-      background: #5865f2;
-      color: white;
-      font-size: 17px;
-      cursor: pointer;
-    }
+p {
+    color: #aeb4c0;
+    font-size: 18px;
+}
 
-    button:hover {
-      background: #4752c4;
-    }
-  </style>
+button {
+    margin-top: 25px;
+    padding: 14px 30px;
+    border: none;
+    border-radius: 8px;
+    background: #5865f2;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #4752c4;
+}
+
+#serverForm {
+    display: none;
+    margin: 40px auto;
+    padding: 25px;
+    max-width: 400px;
+    background: #171a23;
+    border-radius: 12px;
+}
+
+input, select {
+    width: 90%;
+    padding: 12px;
+    margin: 10px;
+    border-radius: 6px;
+    border: none;
+    font-size: 16px;
+}
+
+#createMessage {
+    margin-top: 20px;
+    color: #57f287;
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    ⛏️ My Minecraft Host
-  </header>
+<header>
+⛏ My Minecraft Host
+</header>
 
-  <div class="container">
+<div class="container">
+
     <h1>Your Minecraft Server Starts Here</h1>
-    <p>Create and manage your own Minecraft server.</p>
 
-    <button onclick="alert('Server creation coming soon!')">
-      Create Server
-    </button>
-  </div>
+    <p>Create and manage your Minecraft server.</p>
+
+    <button onclick="showForm()">Create Server</button>
+
+    <div id="serverForm">
+
+        <h2>Create Your Server</h2>
+
+        <input type="text" id="serverName" placeholder="Server Name">
+
+        <br>
+
+        <select id="version">
+            <option value="1.21.11">Minecraft 1.21.11</option>
+            <option value="1.21.10">Minecraft 1.21.10</option>
+            <option value="1.21.8">Minecraft 1.21.8</option>
+        </select>
+
+        <br>
+
+        <select id="software">
+            <option>Paper</option>
+            <option>Fabric</option>
+            <option>Vanilla</option>
+        </select>
+
+        <br>
+
+        <select id="ram">
+            <option>2 GB RAM</option>
+            <option>4 GB RAM</option>
+            <option>8 GB RAM</option>
+        </select>
+
+        <br>
+
+        <button onclick="createServer()">Create</button>
+
+        <p id="createMessage"></p>
+
+    </div>
+
+</div>
+
+<script>
+
+function showForm() {
+    document.getElementById("serverForm").style.display = "block";
+}
+
+function createServer() {
+
+    let name = document.getElementById("serverName").value;
+
+    if (name === "") {
+        alert("Please enter a server name!");
+        return;
+    }
+
+    document.getElementById("createMessage").innerText =
+        "Server '" + name + "' has been created! 🎉";
+
+}
+
+</script>
 
 </body>
 </html>
